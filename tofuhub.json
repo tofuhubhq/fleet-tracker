@@ -1,5 +1,5 @@
 {
-  "name": "fleet-capture",
+  "name": "fleet-tracker",
   "version": "0.0.1",
   "description": "Deploys a fleet tracking web panel",
   "repository": "https://github.com/tofuhubhq/fleet-tracker.git",
