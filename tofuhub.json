@@ -1,6 +1,6 @@
 {
   "name": "fleet-tracker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Deploys a fleet tracking web panel",
   "repository": "https://github.com/tofuhubhq/fleet-tracker.git",
   "homepage": "https://tofuhub.co",

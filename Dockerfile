@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     gnupg \
     git \
+    jq \
     postgresql-client \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
