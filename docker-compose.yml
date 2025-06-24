@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  lorawan-stack:
+    build: .
+    container_name: fleet-tracker-backend
+    restart: unless-stopped
+    environment:
+      - supabase_token
+      - supabase_org_id
+      - supabase_region
+      - supabase_db_password=
+      - supabase_project_name=
