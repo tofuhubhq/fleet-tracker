@@ -89,13 +89,14 @@ resource "null_resource" "wait_for_postgres_ready" {
   provisioner "local-exec" {
     environment = {
       PGPASSWORD = var.supabase_db_password
+      SUPABASE_HOST = "aws-0-${var.supabase_region}.pooler.supabase.com"
     }
 
     command = <<EOT
-      echo "⏳ Waiting for Postgres database to accept connections..."
+      echo "⏳ Waiting for Postgres database (via Shared Pooler) to accept connections..."
 
       for i in {1..30}; do
-        pg_isready -h db.${supabase_project.example.id}.supabase.co \
+        pg_isready -h "$SUPABASE_HOST" \
                    -p 5432 \
                    -U postgres \
                    -d postgres
@@ -123,20 +124,24 @@ resource "null_resource" "run_migrations" {
     environment = {
       SUPABASE_ACCESS_TOKEN = var.supabase_token
       SUPABASE_DB_PASSWORD  = var.supabase_db_password
+      SUPABASE_DB_HOST      = "aws-0-${var.supabase_region}.pooler.supabase.com"
+      SUPABASE_DB_USER      = "postgres.${supabase_project.example.id}"
     }
 
-    command = <<EOT
+    command = <<-EOF
       echo "📦 Running migrations for Supabase project: ${supabase_project.example.id}"
 
-      DB_URL="postgres://postgres:$SUPABASE_DB_PASSWORD@db.${supabase_project.example.id}.supabase.co:5432/postgres"
+      DB_URL="postgres://$SUPABASE_DB_USER:$SUPABASE_DB_PASSWORD@$SUPABASE_DB_HOST:5432/postgres"
 
-      echo "🔗 Connecting to: $DB_URL"
-
-      # Run migrations using the direct DB URL
       npx supabase db push --db-url "$DB_URL"
 
       echo "✅ Migrations applied successfully."
-    EOT
+    EOF
+
     interpreter = ["/bin/bash", "-c"]
   }
 }
+
+
+
+
