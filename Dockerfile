@@ -8,10 +8,14 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     git \
     jq \
-    npm \
     postgresql-client \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20.x (required by Supabase CLI)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm
 
 # Install OpenTofu
 RUN apt-get update && apt-get install curl -y && curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh && chmod +x install-opentofu.sh && ./install-opentofu.sh --install-method deb && rm -f install-opentofu.sh
